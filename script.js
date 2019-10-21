@@ -2,14 +2,14 @@ let book1 = {
     title: 'A Game of Thrones',
     author: 'George R.R. Martin',
     numberOfPages: 782,
-    hasBeenRead: 'read'
+    hasBeenRead: 'Read'
 }
 
 let book2 = {
     title: 'One Hundred Years of Solitude',
     author: 'Gabriel García Márquez',
     numberOfPages: 448,
-    hasBeenRead: 'not read'
+    hasBeenRead: 'Not read'
 }
 
 let addBook = [book2,book1]
@@ -23,10 +23,10 @@ function Book(title, author, numberOfPages, hasBeenRead){
 }
 
 Book.prototype.changeReadStatus = function(){
-    if(this.hasBeenRead === 'read'){
-        return this.hasBeenRead = 'not read'
+    if(this.hasBeenRead === 'Read'){
+        return this.hasBeenRead = 'Not read'
     } else {
-        return this.hasBeenRead = 'read'
+        return this.hasBeenRead = 'Read'
     }
 }
 
@@ -52,18 +52,17 @@ function addBookToLibrary(){
     myLibrary.push(newBook)
     render(newBook)
     addBook = []
-    console.log(addBook, myLibrary)
 }
 
 
 
 
-function render (newBook){
+function render (){
     const display = document.querySelector('.display');
 
     for(let i = 0; i < addBook.length; i++){
         const title = document.createElement('p');
-        title.classList.add('book');
+        title.classList.add('book','title');
         title.textContent = `${addBook[i].title}`;
         display.appendChild(title);
 
@@ -81,14 +80,16 @@ function render (newBook){
         hasBeenRead.classList.add('book');
         display.appendChild(hasBeenRead);
         const readBtn = document.createElement('button')
+        readBtn.classList.add('readStatus')
         readBtn.textContent = `${addBook[i].hasBeenRead}`;
         hasBeenRead.appendChild(readBtn)
 
         readBtn.addEventListener('click', function(e){
-            if(e.target.textContent === 'read'){
-                return e.target.textContent = 'not read'
+            if(e.target.textContent === 'Read'){
+                e.target.classList.add('removered')
+                return e.target.textContent = 'Not read'
             } else {
-                return e.target.textContent = 'read'
+                return e.target.textContent = 'Read'
             }
         })
 
@@ -102,13 +103,18 @@ function render (newBook){
         removeBtnContainer.appendChild(removeBtn)
 
         removeBtn.addEventListener('click', function(){
+            for(let i = 0; i < myLibrary.length; i++){
+                if(myLibrary[i].title.includes(`${title.textContent}`)){
+                    myLibrary.splice(i,1)
+                }
+            }
+            
             display.removeChild(title)
             display.removeChild(author)
             display.removeChild(numberOfPages)
             display.removeChild(hasBeenRead)
             display.removeChild(removeBtnContainer)
-            addBook[i] = []
-            console.log(addBook,myLibrary)
+            
         })
 
     }
@@ -127,8 +133,6 @@ function openForm(){
 function closeForm(){
     formContainer.style.display = 'none'
 }
-
-console.log(addBook, myLibrary)
 
 function clearInputs(){
     for(let i = 0; i < inputs.length; i++){
